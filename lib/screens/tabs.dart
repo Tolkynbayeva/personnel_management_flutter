@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:personnel_management_flutter/screens/chart.dart';
+import 'package:personnel_management_flutter/screens/employees.dart';
+import 'package:personnel_management_flutter/screens/finance.dart';
+import 'package:personnel_management_flutter/screens/news.dart';
+import 'package:personnel_management_flutter/screens/settings.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -12,11 +17,11 @@ class _TabsScreenState extends State<TabsScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    Center(child: Text('Сотрудники')),
-    Center(child: Text('Финансы')),
-    Center(child: Text('График')),
-    Center(child: Text('Новости')),
-    Center(child: Text('Настройки')),
+    EmployeesScreen(),
+    FinanceScreen(),
+    ChartScreen(),
+    NewsScreen(),
+    SettingsScreen(),
   ];
 
   final List<String> _titles = [
@@ -42,7 +47,9 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: false,
         title: Text(
           _titles[_currentIndex],
@@ -56,6 +63,7 @@ class _TabsScreenState extends State<TabsScreen> {
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
         showUnselectedLabels: false,
