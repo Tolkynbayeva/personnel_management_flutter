@@ -1,9 +1,16 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:personnel_management_flutter/models/employee.dart';
 import 'package:personnel_management_flutter/screens/tabs.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(EmployeeAdapter());
+  await Hive.openBox<Employee>('employees');
+
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
@@ -19,11 +26,16 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        scaffoldBackgroundColor: Color(0xFFF2F5F7),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFF2F5F7),
+          elevation: 0,
+          iconTheme: IconThemeData(color: Color(0xFF252525)),
+        ),
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.indigo,
           brightness: Brightness.light,
         ),
-        useMaterial3: true,
       ),
       home: TabsScreen(),
     );

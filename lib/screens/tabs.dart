@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:personnel_management_flutter/screens/chart.dart';
-import 'package:personnel_management_flutter/screens/employees.dart';
+import 'package:personnel_management_flutter/screens/employee/employees.dart';
 import 'package:personnel_management_flutter/screens/finance.dart';
-import 'package:personnel_management_flutter/screens/news.dart';
+import 'package:personnel_management_flutter/screens/news/news.dart';
 import 'package:personnel_management_flutter/screens/settings.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -47,9 +47,9 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+     // backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+       // backgroundColor: Colors.white,
         centerTitle: false,
         title: Text(
           _titles[_currentIndex],
@@ -63,7 +63,7 @@ class _TabsScreenState extends State<TabsScreen> {
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFF2F5F7),
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
         showUnselectedLabels: false,
