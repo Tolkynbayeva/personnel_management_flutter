@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:personnel_management_flutter/models/employee.dart';
+import 'package:personnel_management_flutter/models/employee/employee.dart';
 import 'package:personnel_management_flutter/screens/employee/employee_edit.dart';
 
 class EmployeeDetailsScreen extends StatelessWidget {
   final Employee employee;
+
   const EmployeeDetailsScreen({
     super.key,
     required this.employee,
@@ -14,6 +15,8 @@ class EmployeeDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final salaryFormatted = NumberFormat.decimalPattern('ru_RU').format(employee.salary);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -86,7 +89,7 @@ class EmployeeDetailsScreen extends StatelessWidget {
             _buildDetailCard(title: 'Должность', value: employee.position),
             _buildDetailCard(
               title: 'Заработная плата',
-              value: '${employee.salary.toStringAsFixed(0)} ₽',
+              value: '$salaryFormatted ₽',
             ),
             _buildDetailCard(title: 'Номер телефона', value: employee.phone),
             _buildDetailCard(

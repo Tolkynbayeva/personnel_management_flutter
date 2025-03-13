@@ -2,14 +2,23 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:personnel_management_flutter/models/employee.dart';
+import 'package:personnel_management_flutter/models/employee/employee.dart';
+import 'package:personnel_management_flutter/models/feedback/feedback.dart';
+import 'package:personnel_management_flutter/models/graph/graph.dart';
+import 'package:personnel_management_flutter/models/user_profile/user_profile.dart';
 import 'package:personnel_management_flutter/screens/tabs.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(EmployeeAdapter());
+  Hive.registerAdapter(FeedbackModelAdapter());
+  Hive.registerAdapter(UserProfileAdapter());
+  Hive.registerAdapter(GraphAdapter());
   await Hive.openBox<Employee>('employees');
+  await Hive.openBox<FeedbackModel>('feedbacks');
+  await Hive.openBox<UserProfile>('user_profile');
+  await Hive.openBox<Graph>('graphs');
 
   runApp(
     DevicePreview(

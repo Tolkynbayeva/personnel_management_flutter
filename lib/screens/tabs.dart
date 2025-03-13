@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:personnel_management_flutter/screens/chart.dart';
+import 'package:personnel_management_flutter/screens/graph/graph.dart';
 import 'package:personnel_management_flutter/screens/employee/employees.dart';
 import 'package:personnel_management_flutter/screens/finance.dart';
 import 'package:personnel_management_flutter/screens/news/news.dart';
-import 'package:personnel_management_flutter/screens/settings.dart';
+import 'package:personnel_management_flutter/screens/settings/settings.dart';
 
 class TabsScreen extends StatefulWidget {
-  const TabsScreen({super.key});
+  final int initialIndex;
+
+  const TabsScreen({
+    super.key,
+    this.initialIndex = 0,
+  });
 
   @override
   State<TabsScreen> createState() => _TabsScreenState();
@@ -19,7 +24,7 @@ class _TabsScreenState extends State<TabsScreen> {
   final List<Widget> _pages = [
     EmployeesScreen(),
     FinanceScreen(),
-    ChartScreen(),
+    GraphScreen(),
     NewsScreen(),
     SettingsScreen(),
   ];
@@ -47,9 +52,7 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     // backgroundColor: Colors.white,
       appBar: AppBar(
-       // backgroundColor: Colors.white,
         centerTitle: false,
         title: Text(
           _titles[_currentIndex],

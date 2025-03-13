@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:personnel_management_flutter/models/employee.dart';
+import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:personnel_management_flutter/models/employee/employee.dart';
 import 'package:personnel_management_flutter/screens/employee/employee_save.dart';
 import 'package:personnel_management_flutter/widgets/button_save.dart';
 import 'package:personnel_management_flutter/widgets/text_field.dart';
@@ -14,35 +16,51 @@ class EmployeeAddScreen extends StatefulWidget {
 
 class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
   final _formKey = GlobalKey<FormState>();
-
   final _fullName = TextEditingController();
   final _position = TextEditingController();
   final _salary = TextEditingController();
   final _phone = TextEditingController();
   final _comment = TextEditingController();
+  final _hireDate = TextEditingController();
+  DateTime? _hireDateValue;
 
-  DateTime? _hireDate;
+  final phoneMask = MaskTextInputFormatter(
+    mask: '+# (###) ###-##-##',
+    filter: {"#": RegExp(r'\d')},
+  );
+
+  final dateMask = MaskTextInputFormatter(
+    mask: '##.##.####',
+    filter: {"#": RegExp(r'\d')},
+  );
 
   void _saveEmployee() {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+      final rawDate = _hireDate.text.trim();
+      if (rawDate.isNotEmpty && rawDate.length == 10) {
+        try {
+          _hireDateValue = DateFormat('dd.MM.yyyy').parse(rawDate);
+        } catch (e) {
+          //
+        }
+      }
 
-      final employee = Employee(
-        fullName: _fullName.text.trim(),
-        position: _position.text.trim(),
-        salary: double.tryParse(_salary.text) ?? 0,
-        phone: _phone.text.trim(),
-        hireDate: _hireDate!,
-        comment: _comment.text.trim(),
-      );
-
-      final box = Hive.box<Employee>('employees');
-      box.add(employee);
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => EmployeeSavedScreen()),
-      );
+      if (_hireDateValue != null) {
+        final employee = Employee(
+          fullName: toTitleCase(_fullName.text.trim()),
+          position: _position.text.trim(),
+          salary:
+              double.tryParse(_salary.text.replaceAll(RegExp(r'\D'), '')) ?? 0,
+          phone: _phone.text.trim(),
+          hireDate: _hireDateValue!,
+          comment: _comment.text.trim(),
+        );
+        Hive.box<Employee>('employees').add(employee);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const EmployeeSavedScreen()),
+        );
+      }
     }
   }
 
@@ -54,6 +72,13 @@ class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
     _phone.dispose();
     _comment.dispose();
     super.dispose();
+  }
+
+  String toTitleCase(String text) {
+    return text.split(' ').map((word) {
+      if (word.isEmpty) return word;
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).join(' ');
   }
 
   @override
@@ -70,18 +95,84 @@ class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              FullNameField(controller: _fullName),
-              PositionField(controller: _position),
-              SizedBox(height: 24),
-              ButtonSave(onPressed: _saveEmployee),
-            ],
-          ),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      ErrorTextFormField(
+                        controller: _fullName,
+                        hintText: 'ФИО',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ошибка';
+                          }
+                          return null;
+                        },
+                      ),
+                      ErrorTextFormField(
+                        controller: _position,
+                        hintText: 'Должность',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ошибка';
+                          }
+                          return null;
+                        },
+                      ),
+                      ErrorTextFormField(
+                        controller: _salary,
+                        hintText: 'Заработная плата',
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [SalaryFormatter()],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ошибка';
+                          }
+                          return null;
+                        },
+                      ),
+                      ErrorTextFormField(
+                        controller: _phone,
+                        hintText: 'Номер телефона',
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [phoneMask],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ошибка';
+                          }
+                          return null;
+                        },
+                      ),
+                      ErrorTextFormField(
+                        controller: _hireDate,
+                        hintText: 'Дата оформления',
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [dateMask],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ошибка';
+                          }
+                          return null;
+                        },
+                      ),
+                      ErrorTextFormField(
+                        controller: _comment,
+                        hintText: 'Комментарий',
+                        maxLines: 4,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            ButtonSave(onPressed: _saveEmployee),
+          ],
         ),
       ),
     );

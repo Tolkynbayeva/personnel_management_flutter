@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:personnel_management_flutter/screens/tabs.dart';
+
 import 'package:personnel_management_flutter/widgets/button_back.dart';
 
-class EmployeeSavedScreen extends StatelessWidget {
-  const EmployeeSavedScreen({
+class GraphSavedScreen extends StatelessWidget {
+  const GraphSavedScreen({
     super.key,
   });
 
@@ -41,12 +42,11 @@ class EmployeeSavedScreen extends StatelessWidget {
             ),
             const SizedBox(height: 31),
             ButtonBack(
-              title: 'К сотрудникам',
+              title: 'К графику',
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (_) => TabsScreen()),
-                  (route) => false,
+                  MaterialPageRoute(builder: (_) => TabsScreen(initialIndex: 2)),
                 );
               },
             )

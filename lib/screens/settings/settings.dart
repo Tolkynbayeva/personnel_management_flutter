@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:personnel_management_flutter/screens/settings/account.dart';
+import 'package:personnel_management_flutter/screens/settings/feedback.dart';
+import 'package:personnel_management_flutter/screens/settings/information.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -23,7 +26,13 @@ class SettingsScreen extends StatelessWidget {
             size: 34,
             color: Color(0xFFDEDEDF),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => AccountScreen(),
+              ),
+            );
+          },
         ),
         Divider(
           thickness: 0.5,
@@ -44,7 +53,13 @@ class SettingsScreen extends StatelessWidget {
             size: 34,
             color: Color(0xFFDEDEDF),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => FeedbackScreen(),
+              ),
+            );
+          },
         ),
         Divider(
           thickness: 0.5,
@@ -65,7 +80,13 @@ class SettingsScreen extends StatelessWidget {
             size: 34,
             color: Color(0xFFDEDEDF),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => InformationScreen(),
+              ),
+            );
+          },
         ),
         Divider(
           thickness: 0.5,

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:personnel_management_flutter/models/employee.dart';
+import 'package:intl/intl.dart';
+import 'package:personnel_management_flutter/models/employee/employee.dart';
 import 'package:personnel_management_flutter/screens/employee/employee_add.dart';
 import 'package:personnel_management_flutter/screens/employee/employee_details.dart';
 import 'package:personnel_management_flutter/widgets/button_add.dart';
 
-class EmployeeList extends StatefulWidget {
-  const EmployeeList({super.key});
+class EmployeeListScreen extends StatefulWidget {
+  const EmployeeListScreen({super.key});
 
   @override
-  State<EmployeeList> createState() => _EmployeeListState();
+  State<EmployeeListScreen> createState() => _EmployeeListScreenState();
 }
 
-class _EmployeeListState extends State<EmployeeList> {
+class _EmployeeListScreenState extends State<EmployeeListScreen> {
   late Box<Employee> _employeeBox;
 
   @override
@@ -42,6 +43,9 @@ class _EmployeeListState extends State<EmployeeList> {
             itemBuilder: (context, index) {
               final employee = _employeeBox.getAt(index);
               if (employee == null) return const SizedBox();
+              final salaryFormatted =
+                  NumberFormat.decimalPattern('ru_RU').format(employee.salary);
+                  
               return InkWell(
                 onTap: () async {
                   final result = await Navigator.push(
@@ -57,11 +61,12 @@ class _EmployeeListState extends State<EmployeeList> {
                   }
                 },
                 child: Card(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: EdgeInsets.only(bottom: 16),
                   color: Color(0xFFF2F5F7),
                   elevation: 1,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(13)),
+                    borderRadius: BorderRadius.circular(13),
+                  ),
                   child: Padding(
                     padding: EdgeInsets.all(16),
                     child: Column(
@@ -92,12 +97,14 @@ class _EmployeeListState extends State<EmployeeList> {
                               children: [
                                 SvgPicture.asset('assets/svg/ellipse.svg'),
                                 SizedBox(width: 8),
-                                Text(
-                                  employee.position,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    height: 1.6,
-                                    color: Color(0xFF818181),
+                                Expanded(
+                                  child: Text(
+                                    employee.position,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      height: 1.6,
+                                      color: Color(0xFF818181),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -108,7 +115,7 @@ class _EmployeeListState extends State<EmployeeList> {
                                 SvgPicture.asset('assets/svg/ellipse.svg'),
                                 SizedBox(width: 8),
                                 Text(
-                                  '${employee.salary.toStringAsFixed(0)} ₽',
+                                  '$salaryFormatted ₽',
                                   style: TextStyle(
                                     fontSize: 14,
                                     height: 1.6,
