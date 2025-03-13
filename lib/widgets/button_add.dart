@@ -16,6 +16,7 @@ class ButtonAdd extends StatelessWidget {
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         gradient: LinearGradient(
+          end: Alignment(2, 0),
           colors: [
             Color(0xFF2253F6),
             Color(0xFF9DB4FF),

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:personnel_management_flutter/screens/graph/graph.dart';
 import 'package:personnel_management_flutter/screens/employee/employees.dart';
-import 'package:personnel_management_flutter/screens/finance.dart';
+import 'package:personnel_management_flutter/screens/finance/finance.dart';
 import 'package:personnel_management_flutter/screens/news/news.dart';
 import 'package:personnel_management_flutter/screens/settings/settings.dart';
+import 'package:personnel_management_flutter/widgets/finance/filter_button.dart';
 
 class TabsScreen extends StatefulWidget {
   final int initialIndex;
@@ -63,6 +64,7 @@ class _TabsScreenState extends State<TabsScreen> {
             color: Color(0xFF252525),
           ),
         ),
+        actions: _currentIndex == 1 ? [FilterButton()] : null,
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
