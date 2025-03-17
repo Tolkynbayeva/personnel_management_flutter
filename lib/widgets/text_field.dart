@@ -9,6 +9,7 @@ class ErrorTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
+  final bool readOnly;
 
   const ErrorTextFormField({
     super.key,
@@ -18,6 +19,7 @@ class ErrorTextFormField extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.validator,
+    this.readOnly = false,
   });
 
   @override
@@ -42,6 +44,7 @@ class ErrorTextFormField extends StatelessWidget {
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
         validator: validator,
+        readOnly: readOnly,
         decoration: InputDecoration(
           filled: true,
           fillColor: const Color(0xFFF2F5F7),

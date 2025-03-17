@@ -58,15 +58,15 @@ class _GraphAddScreenState extends State<GraphAddScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                EmployeeAutocompleteField(
-                  employees: allEmployees,
-                  initialEmployee: _selectedEmployee,
-                  onEmployeeSelected: (emp) {
-                    setState(() {
-                      _selectedEmployee = emp;
-                    });
-                  },
-                ),
+                // EmployeeAutocompleteField(
+                //   employees: allEmployees,
+                //   initialEmployee: _selectedEmployee,
+                //   onEmployeeSelected: (emp) {
+                //     setState(() {
+                //       _selectedEmployee = emp;
+                //     });
+                //   },
+                // ),
                 _buildWorkPeriodTile(),
                 const Text(
                   'Рабочее время',

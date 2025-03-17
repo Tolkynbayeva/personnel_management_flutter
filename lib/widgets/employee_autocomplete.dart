@@ -1,154 +1,162 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:personnel_management_flutter/models/employee/employee.dart';
 
-class EmployeeAutocompleteField extends StatefulWidget {
-  final List<Employee> employees;
-  final ValueChanged<Employee> onEmployeeSelected;
-  final Employee? initialEmployee;
+class EmployeeTypeAheadField extends StatefulWidget {
+  final TextEditingController controller;
+  final void Function(Employee) onSelected;
+  final String hintText;
 
-  const EmployeeAutocompleteField({
+  const EmployeeTypeAheadField({
     super.key,
-    required this.employees,
-    required this.onEmployeeSelected,
-    this.initialEmployee,
+    required this.controller,
+    required this.onSelected,
+    this.hintText = 'Сотрудник',
   });
 
   @override
-  State<EmployeeAutocompleteField> createState() =>
-      _EmployeeAutocompleteFieldState();
+  State<EmployeeTypeAheadField> createState() => _EmployeeTypeAheadFieldState();
 }
 
-class _EmployeeAutocompleteFieldState extends State<EmployeeAutocompleteField> {
+class _EmployeeTypeAheadFieldState extends State<EmployeeTypeAheadField> {
+  late final Box<Employee> _employeeBox;
+  
+
+  @override
+  void initState() {
+    super.initState();
+    _employeeBox = Hive.box<Employee>('employees');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Autocomplete<Employee>(
-      displayStringForOption: (emp) => emp.fullName,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        final query = textEditingValue.text.toLowerCase();
-        if (query.isEmpty) {
-          return widget.employees;
-        }
-        return widget.employees.where((emp) {
-          return emp.fullName.toLowerCase().contains(query) ||
-              emp.position.toLowerCase().contains(query);
-        });
+    return TypeAheadField<Employee>(
+      suggestionsCallback: (String pattern) {
+        final matches = _employeeBox.values.where((emp) =>
+            emp.fullName.toLowerCase().contains(pattern.toLowerCase()));
+        return matches.toList();
       },
-      onSelected: (emp) {
-        widget.onEmployeeSelected(emp);
-      },
-      fieldViewBuilder: (
-        BuildContext context,
-        TextEditingController textController,
-        FocusNode focusNode,
-        VoidCallback onFieldSubmitted,
-      ) {
-        if (widget.initialEmployee != null) {
-          textController.text = widget.initialEmployee!.fullName;
-        }
-
-        return Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
-          color: const Color(0xFFF2F5F7),
-          margin: const EdgeInsets.only(bottom: 16),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: textController,
-                  focusNode: focusNode,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                    hintText: 'Сотрудник',
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(right: 16.0),
-                child: Icon(
-                  Icons.chevron_right,
-                  size: 30,
-                  color: Color(0xFF818181),
-                ),
+      builder: (BuildContext context, TextEditingController textController,
+          FocusNode focusNode) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(13),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x0D000000),
+                offset: Offset(0, 2),
+                blurRadius: 6,
               ),
             ],
           ),
-        );
-      },
-      optionsViewBuilder: (
-        BuildContext context,
-        AutocompleteOnSelected<Employee> onSelected,
-        Iterable<Employee> options,
-      ) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            color: Color(0xFFF2F5F7),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width - 32,
+          child: TextField(
+            controller: widget.controller,
+            focusNode: focusNode,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(16),
+              filled: true,
+              fillColor: const Color(0xFFF2F5F7),
+              hintText: widget.hintText,
+              hintStyle: const TextStyle(
+                fontSize: 16,
+                height: 1.4,
+                color: Color(0xFF818181),
               ),
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: options.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final emp = options.elementAt(index);
-                  return InkWell(
-                    onTap: () => onSelected(emp),
-                    child: Card(
-                      color: Color(0xFFF2F5F7),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                SvgPicture.asset('assets/svg/person.fill.svg'),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    emp.fullName,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                      color: Color(0xFF252525),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 12),
-                            Row(
-                              children: [
-                                SvgPicture.asset('assets/svg/ellipse.svg'),
-                                SizedBox(width: 8),
-                                Text(
-                                  emp.position,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Color(0xFF818181),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
+              suffixIcon: const Icon(
+                Icons.arrow_forward_ios,
+                size: 20,
+                color: Color(0xFF818181),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(13),
+                borderSide: BorderSide.none,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(13),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(13),
+                borderSide: BorderSide.none,
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(13),
+                borderSide: const BorderSide(color: Color(0xFFBA0000)),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(13),
+                borderSide: const BorderSide(color: Color(0xFFBA0000)),
               ),
             ),
           ),
         );
       },
+      itemBuilder: (BuildContext context, Employee suggestion) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 8, right: 16, left: 16, bottom: 8),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SvgPicture.asset('assets/svg/person.fill.svg'),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      suggestion.fullName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        height: 1.3,
+                        color: Color(0xFF252525),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12),
+              Row(
+                children: [
+                  SvgPicture.asset('assets/svg/ellipse.svg'),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      suggestion.position,
+                      style: TextStyle(
+                        fontSize: 14,
+                        height: 1.6,
+                        color: Color(0xFF818181),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+      onSelected: (Employee selected) {
+        widget.controller.text = selected.fullName;
+        widget.onSelected(selected);
+      },
+      decorationBuilder: (context, suggestionsBox) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(13),
+            color: const Color(0xFFF2F5F7),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x14000000),
+                offset: Offset(0, 2),
+                blurRadius: 6,
+              ),
+            ],
+          ),
+          child: suggestionsBox,
+        );
+      },
     );
   }
 }
+

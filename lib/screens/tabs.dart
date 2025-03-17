@@ -20,7 +20,7 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  int _currentIndex = 0;
+  late int _currentIndex;
 
   final List<Widget> _pages = [
     EmployeesScreen(),
@@ -37,6 +37,12 @@ class _TabsScreenState extends State<TabsScreen> {
     'Новости',
     'Настройки',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
 
   void _onItemTapped(int index) {
     setState(() {

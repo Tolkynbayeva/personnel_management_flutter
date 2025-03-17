@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:personnel_management_flutter/screens/finance/bonus/bonus.dart';
+import 'package:personnel_management_flutter/screens/finance/reprimand/reprimand.dart';
 
 class FinanceScreen extends StatefulWidget {
   const FinanceScreen({super.key});
@@ -29,7 +31,6 @@ class _FinanceScreenState extends State<FinanceScreen> {
       ),
     );
   }
-
 
   Widget _buildTab(String label, int index) {
     final bool isSelected = (_selectedIndex == index);
@@ -68,9 +69,9 @@ class _FinanceScreenState extends State<FinanceScreen> {
   Widget _buildTabContent(int index) {
     switch (index) {
       case 0:
-        return _buildVygovorContent();
+        return ReprimandScreen();
       case 1:
-        return _buildPremiyaContent();
+        return BonusScreen();
       case 2:
         return _buildZarplataContent();
       default:
@@ -78,11 +79,11 @@ class _FinanceScreenState extends State<FinanceScreen> {
     }
   }
 
-  Widget _buildVygovorContent() {
-    return Center(
-      child: Text('Тут будут «Выговор»'),
-    );
-  }
+  // Widget _buildVygovorContent() {
+  //   return Center(
+  //     child: Text('Тут будут «Выговор»'),
+  //   );
+  // }
 
   Widget _buildPremiyaContent() {
     return Center(

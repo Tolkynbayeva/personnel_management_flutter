@@ -25,8 +25,7 @@ class ButtonSave extends StatelessWidget {
               Color(0xFF2253F6),
               Color(0xFF9DB4FF),
             ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight
+            end: Alignment(4, 0),
           ),
           borderRadius: BorderRadius.circular(60),
         ),

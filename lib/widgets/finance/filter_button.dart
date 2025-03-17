@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class FilterButton extends StatelessWidget {
-  const FilterButton({super.key});
+  final VoidCallback? onTap;
+
+  const FilterButton({
+    super.key,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onTap,
       child: Container(
         height: 30,
         margin: EdgeInsets.only(right: 16),
