@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:personnel_management_flutter/screens/finance/bonus/bonus.dart';
 import 'package:personnel_management_flutter/screens/finance/reprimand/reprimand.dart';
+import 'package:personnel_management_flutter/screens/finance/salary/salary.dart';
 
 class FinanceScreen extends StatefulWidget {
   const FinanceScreen({super.key});
@@ -73,7 +74,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
       case 1:
         return BonusScreen();
       case 2:
-        return _buildZarplataContent();
+        return SalaryScreen();
       default:
         return const SizedBox();
     }

@@ -15,7 +15,8 @@ class EmployeeDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final salaryFormatted = NumberFormat.decimalPattern('ru_RU').format(employee.salary);
+    final salaryFormatted =
+        NumberFormat.decimalPattern('ru_RU').format(employee.salary);
 
     return Scaffold(
       appBar: AppBar(
@@ -96,6 +97,8 @@ class EmployeeDetailsScreen extends StatelessWidget {
               title: 'Дата регистрации',
               value: DateFormat('dd.MM.yyyy').format(employee.hireDate),
             ),
+            if (employee.comment.isNotEmpty)
+              _buildDetailCard(title: 'Комментарий', value: employee.comment),
           ],
         ),
       ),

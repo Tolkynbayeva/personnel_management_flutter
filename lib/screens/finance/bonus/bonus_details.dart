@@ -65,10 +65,11 @@ class BonusDetailsScreen extends StatelessWidget {
             title: 'Сумма',
             value: '$salaryFormatted ₽',
           ),
-          _buildDetailCard(
-            title: 'Комментарий',
-            value: bonus.comment,
-          ),
+          if (bonus.comment.isNotEmpty)
+            _buildDetailCard(
+              title: 'Комментарий',
+              value: bonus.comment,
+            ),
         ],
       ),
     );

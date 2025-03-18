@@ -67,10 +67,11 @@ class ReprimandDetailsScreen extends StatelessWidget {
               title: 'Сумма',
               value: '$salaryFormatted ₽',
             ),
-            _buildDetailCard(
-              title: 'Комментарий',
-              value: reprimand.comment,
-            ),
+            if (reprimand.comment.isNotEmpty)
+              _buildDetailCard(
+                title: 'Комментарий',
+                value: reprimand.comment,
+              ),
           ],
         ),
       ),
