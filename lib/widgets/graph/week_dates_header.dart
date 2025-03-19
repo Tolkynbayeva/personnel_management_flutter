@@ -22,7 +22,7 @@ class _WeekDatesHeaderState extends State<WeekDatesHeader> {
   void initState() {
     super.initState();
     _weekDates = _generateWeekDates(widget.initialDate);
-    _selectedDate = _weekDates.first;
+    _selectedDate = widget.initialDate;
   }
 
   List<DateTime> _generateWeekDates(DateTime date) {
@@ -75,43 +75,49 @@ class _WeekDatesHeaderState extends State<WeekDatesHeader> {
         });
         widget.onDateSelected(day);
       },
-      child: Card(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: isSelected
-                ? const LinearGradient(
-                    colors: [
-                      Color(0xFF2253F6),
-                      Color(0xFF9DB4FF),
-                    ],
-                    begin: Alignment.centerRight,
-                  )
-                : null,
-            color: isSelected ? null : const Color(0xFFF2F5F7),
-            borderRadius: BorderRadius.circular(13),
-          ),
-          width: 44,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                weekdayName,
-                style: TextStyle(
-                  fontSize: 10,
-                  color: isSelected ? Color(0xFFF2F2EA) : const Color(0xFF252525),
-                ),
+      child: Container(
+        margin: EdgeInsets.only(right: 8, bottom: 2),
+        decoration: BoxDecoration(
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0D000000),
+              offset: Offset(0, 2),
+              blurRadius: 6,
+            ),
+          ],
+          gradient: isSelected
+              ? const LinearGradient(
+                  colors: [
+                    Color(0xFF2253F6),
+                    Color(0xFF9DB4FF),
+                  ],
+                  end: Alignment(2, 0),
+                )
+              : null,
+          color: isSelected ? null : const Color(0xFFF2F5F7),
+          borderRadius: BorderRadius.circular(13),
+        ),
+        width: 44,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              weekdayName,
+              style: TextStyle(
+                fontSize: 10,
+                color: isSelected ? Color(0xFFF2F2EA) : const Color(0xFF252525),
               ),
-              const SizedBox(height: 8),
-              Text(
-                '$dayNum',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: isSelected ? Color(0xFFF2F2EA) : const Color(0xFF252525),
-                ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '$dayNum',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: isSelected ? Color(0xFFF2F2EA) : const Color(0xFF252525),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

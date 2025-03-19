@@ -8,12 +8,14 @@ class EmployeeTypeAheadField extends StatefulWidget {
   final TextEditingController controller;
   final void Function(Employee) onSelected;
   final String hintText;
+  final Color color;
 
   const EmployeeTypeAheadField({
     super.key,
     required this.controller,
     required this.onSelected,
     this.hintText = 'Сотрудник',
+    this.color = const Color(0xFF818181),
   });
 
   @override
@@ -59,10 +61,10 @@ class _EmployeeTypeAheadFieldState extends State<EmployeeTypeAheadField> {
               filled: true,
               fillColor: const Color(0xFFF2F5F7),
               hintText: widget.hintText,
-              hintStyle: const TextStyle(
+              hintStyle: TextStyle(
                 fontSize: 16,
                 height: 1.4,
-                color: Color(0xFF818181),
+                color: widget.color,
               ),
               suffixIcon: const Icon(
                 Icons.arrow_forward_ios,

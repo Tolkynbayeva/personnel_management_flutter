@@ -17,7 +17,7 @@ class GraphAdapter extends TypeAdapter<Graph> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Graph(
-      employeeKey: fields[0] as int?,
+      employeeName: fields[0] as String,
       workStartDate: fields[1] as DateTime?,
       workEndDate: fields[2] as DateTime?,
       timeStart: fields[3] as String?,
@@ -32,7 +32,7 @@ class GraphAdapter extends TypeAdapter<Graph> {
     writer
       ..writeByte(7)
       ..writeByte(0)
-      ..write(obj.employeeKey)
+      ..write(obj.employeeName)
       ..writeByte(1)
       ..write(obj.workStartDate)
       ..writeByte(2)

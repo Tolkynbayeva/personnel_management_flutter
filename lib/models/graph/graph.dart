@@ -5,7 +5,7 @@ part 'graph.g.dart';
 @HiveType(typeId: 3)
 class Graph extends HiveObject {
   @HiveField(0)
-  int? employeeKey;
+  String employeeName;
 
   @HiveField(1)
   DateTime? workStartDate;
@@ -23,7 +23,7 @@ class Graph extends HiveObject {
   DateTime? offEndDate;
 
   Graph({
-    this.employeeKey,
+    required this.employeeName,
     this.workStartDate,
     this.workEndDate,
     this.timeStart,

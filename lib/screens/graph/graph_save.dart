@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:personnel_management_flutter/screens/tabs.dart';
-
 import 'package:personnel_management_flutter/widgets/button_back.dart';
 
-class GraphSavedScreen extends StatelessWidget {
-  const GraphSavedScreen({
-    super.key,
-  });
+class GraphSaveScreen extends StatelessWidget {
+  const GraphSaveScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +41,14 @@ class GraphSavedScreen extends StatelessWidget {
             ButtonBack(
               title: 'К графику',
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (_) => TabsScreen(initialIndex: 2)),
+                  MaterialPageRoute(
+                    builder: (_) => TabsScreen(
+                      initialIndex: 2,
+                    ),
+                  ),
+                  (route) => false,
                 );
               },
             )
