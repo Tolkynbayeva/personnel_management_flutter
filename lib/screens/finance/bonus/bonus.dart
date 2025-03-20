@@ -6,7 +6,12 @@ import 'package:personnel_management_flutter/screens/finance/bonus/bonus_list.da
 import 'package:personnel_management_flutter/widgets/empty.dart';
 
 class BonusScreen extends StatelessWidget {
-  const BonusScreen({super.key});
+  final DateTime? filterDate;
+
+  const BonusScreen({
+    super.key,
+    this.filterDate,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class BonusScreen extends StatelessWidget {
             },
           );
         } else {
-          return BonusListScreen();
+          return BonusListScreen(filterDate: filterDate);
         }
       },
     );

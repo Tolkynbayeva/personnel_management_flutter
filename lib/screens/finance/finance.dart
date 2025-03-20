@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:personnel_management_flutter/screens/finance/bonus/bonus.dart';
 import 'package:personnel_management_flutter/screens/finance/reprimand/reprimand.dart';
 import 'package:personnel_management_flutter/screens/finance/salary/salary.dart';
 
 class FinanceScreen extends StatefulWidget {
-  const FinanceScreen({super.key});
+  final DateTime? filterDate;
+  final void Function()? onClearFilter;
+
+  const FinanceScreen({
+    super.key,
+    this.filterDate,
+    this.onClearFilter,
+  });
 
   @override
   State<FinanceScreen> createState() => _FinanceScreenState();
@@ -25,6 +33,48 @@ class _FinanceScreenState extends State<FinanceScreen> {
               return Expanded(child: _buildTab(_tabs[index], index));
             }),
           ),
+          if (widget.filterDate != null)
+            Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDEE5FF),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        DateFormat('dd.MM.yyyy').format(widget.filterDate!),
+                        style: const TextStyle(
+                          color: Color(0xFF2253F6),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      GestureDetector(
+                        onTap: widget.onClearFilter,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFF2253F6),
+                          ),
+                          padding: const EdgeInsets.all(4),
+                          child: Icon(
+                            Icons.close,
+                            size: 9,
+                            color: Color(0xFFDEE5FF),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
           Expanded(
             child: _buildTabContent(_selectedIndex),
           ),
@@ -70,31 +120,13 @@ class _FinanceScreenState extends State<FinanceScreen> {
   Widget _buildTabContent(int index) {
     switch (index) {
       case 0:
-        return ReprimandScreen();
+        return ReprimandScreen(filterDate: widget.filterDate);
       case 1:
-        return BonusScreen();
+        return BonusScreen(filterDate: widget.filterDate);
       case 2:
         return SalaryScreen();
       default:
         return const SizedBox();
     }
-  }
-
-  // Widget _buildVygovorContent() {
-  //   return Center(
-  //     child: Text('Тут будут «Выговор»'),
-  //   );
-  // }
-
-  Widget _buildPremiyaContent() {
-    return Center(
-      child: Text('Тут будут «Премия»'),
-    );
-  }
-
-  Widget _buildZarplataContent() {
-    return Center(
-      child: Text('Тут будут «Зарплата»'),
-    );
   }
 }

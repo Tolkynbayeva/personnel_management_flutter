@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:personnel_management_flutter/widgets/custom_calendar_dialog.dart';
 
 class FilterButton extends StatelessWidget {
-  final VoidCallback? onTap;
+  final ValueChanged<DateTime> onDatePicked;
 
   const FilterButton({
     super.key,
-    this.onTap,
+    required this.onDatePicked,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () async {
+        final selected = await showDialog<DateTime>(
+          context: context,
+          builder: (_) => CustomCalendarDialog(),
+        );
+        if (selected != null) {
+          onDatePicked(selected);
+        }
+      },
       child: Container(
         height: 30,
         margin: EdgeInsets.only(right: 16),

@@ -6,7 +6,12 @@ import 'package:personnel_management_flutter/screens/finance/reprimand/reprimand
 import 'package:personnel_management_flutter/widgets/empty.dart';
 
 class ReprimandScreen extends StatelessWidget {
-  const ReprimandScreen({super.key});
+  final DateTime? filterDate;
+
+  const ReprimandScreen({
+    super.key,
+    this.filterDate,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class ReprimandScreen extends StatelessWidget {
             },
           );
         } else {
-          return ReprimandListScreen();
+          return ReprimandListScreen(filterDate: filterDate);
         }
       },
     );

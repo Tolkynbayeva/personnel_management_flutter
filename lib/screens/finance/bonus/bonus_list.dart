@@ -8,7 +8,11 @@ import 'package:personnel_management_flutter/widgets/button_add.dart';
 import 'package:personnel_management_flutter/screens/finance/bonus/bonus_add.dart';
 
 class BonusListScreen extends StatefulWidget {
-  const BonusListScreen({super.key});
+  final DateTime? filterDate;
+  const BonusListScreen({
+    super.key,
+    this.filterDate,
+  });
 
   @override
   State<BonusListScreen> createState() => _BonusListScreenState();
@@ -34,13 +38,21 @@ class _BonusListScreenState extends State<BonusListScreen> {
     if (!Hive.isBoxOpen('bonuses')) {
       return Center(child: CircularProgressIndicator());
     }
+    final allItems = _bonusBox.values.toList();
+    final filteredItems = allItems.where((bonus) {
+      if (widget.filterDate == null) {
+        return true;
+      }
+      return _isSameDay(bonus.date, widget.filterDate!);
+    }).toList();
+
     return Stack(
       children: [
         ListView.builder(
           padding: EdgeInsets.only(top: 32),
-          itemCount: _bonusBox.length,
+          itemCount: filteredItems.length,
           itemBuilder: (context, index) {
-            final bonus = _bonusBox.getAt(index);
+            final bonus = filteredItems[index];
             if (bonus == null) return SizedBox();
 
             return InkWell(
@@ -133,5 +145,9 @@ class _BonusListScreenState extends State<BonusListScreen> {
         ),
       ],
     );
+  }
+
+  bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 }

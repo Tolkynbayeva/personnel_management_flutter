@@ -21,14 +21,15 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   late int _currentIndex;
+  DateTime? _filterDate;
 
-  final List<Widget> _pages = [
-    EmployeesScreen(),
-    FinanceScreen(),
-    GraphScreen(),
-    NewsScreen(),
-    SettingsScreen(),
-  ];
+  // final List<Widget> _pages = [
+  //   EmployeesScreen(),
+  //   FinanceScreen(),
+  //   GraphScreen(),
+  //   NewsScreen(),
+  //   SettingsScreen(),
+  // ];
 
   final List<String> _titles = [
     'Сотрудники',
@@ -58,6 +59,21 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      EmployeesScreen(),
+      FinanceScreen(
+        filterDate: _filterDate,
+        onClearFilter: () => setState(
+          () {
+            _filterDate = null;
+          },
+        ),
+      ),
+      GraphScreen(),
+      NewsScreen(),
+      SettingsScreen(),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -70,7 +86,15 @@ class _TabsScreenState extends State<TabsScreen> {
             color: Color(0xFF252525),
           ),
         ),
-        actions: _currentIndex == 1 ? [FilterButton()] : null,
+        actions: _currentIndex == 1
+            ? [
+                FilterButton(onDatePicked: (date) {
+                  setState(() {
+                    _filterDate = date;
+                  });
+                }),
+              ]
+            : null,
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

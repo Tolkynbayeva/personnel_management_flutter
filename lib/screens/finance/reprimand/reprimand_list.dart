@@ -8,7 +8,12 @@ import 'package:personnel_management_flutter/widgets/button_add.dart';
 import 'package:personnel_management_flutter/screens/finance/reprimand/reprimand_add.dart';
 
 class ReprimandListScreen extends StatefulWidget {
-  const ReprimandListScreen({super.key});
+  final DateTime? filterDate;
+
+  const ReprimandListScreen({
+    super.key,
+    this.filterDate,
+  });
 
   @override
   State<ReprimandListScreen> createState() => _ReprimandListScreenState();
@@ -34,14 +39,22 @@ class _ReprimandListScreenState extends State<ReprimandListScreen> {
     if (!Hive.isBoxOpen('reprimands')) {
       return Center(child: CircularProgressIndicator());
     }
+    final allItems = _reprimandBox.values.toList();
+    final filteredItems = allItems.where((reprimand) {
+      if (widget.filterDate == null) {
+        return true;
+      }
+      return _isSameDay(reprimand.date, widget.filterDate!);
+    }).toList();
+
     return Stack(
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 32),
+          padding: EdgeInsets.only(top: 24),
           child: ListView.builder(
-            itemCount: _reprimandBox.length,
+            itemCount: filteredItems.length,
             itemBuilder: (context, index) {
-              final reprimand = _reprimandBox.getAt(index);
+              final reprimand = filteredItems[index];
               if (reprimand == null) return SizedBox();
 
               return InkWell(
@@ -136,5 +149,9 @@ class _ReprimandListScreenState extends State<ReprimandListScreen> {
         ),
       ],
     );
+  }
+
+  bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 }
