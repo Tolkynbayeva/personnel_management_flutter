@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class ButtonSave extends StatelessWidget {
   final VoidCallback onPressed;
+  final String title;
 
   const ButtonSave({
     super.key,
     required this.onPressed,
+    this.title = 'Сохранить',
   });
 
   @override
@@ -34,7 +36,7 @@ class ButtonSave extends StatelessWidget {
           padding: EdgeInsets.all(20),
           width: double.infinity,
           child: Text(
-            'Сохранить',
+            title,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
